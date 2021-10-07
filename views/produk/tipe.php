@@ -7,12 +7,12 @@ function submit(x) {
         $('[name="idbrand"]').val("").trigger('change');
         $('[name="namatipe"]').val("");
         $('#transaksiModal .modal-title').html('Add Type');
-        $('[name="tipe_no"]').prop('readonly', true);
+        $('[name="tipe_no"]').prop('readonly', false);
         $('[name="ubah"]').hide();
         $('[name="tambah"]').show();
     } else {
         $('#transaksiModal .modal-title').html('Edit Type');
-        $('[name="tipe_no"]').prop('readonly', true);
+        $('[name="tipe_no"]').prop('readonly', false);
         $('[name="tambah"]').hide();
         $('[name="ubah"]').show();
 
@@ -28,7 +28,12 @@ function submit(x) {
                 $('[name="namatipe"]').val(data.namatipe);
                 $('[name="tipe_no"]').val(data.tipe_no);
                 $('[name="idcat"]').val(data.idcat).trigger('change');
-                $('[name="idbrand"]').val(data.idbrand).trigger('change');
+                setTimeout(
+                    function() 
+                    {
+                        $('[name="idbrand"]').val(data.idbrand).trigger('change');
+                    }, 500);
+
             }
         });
     }

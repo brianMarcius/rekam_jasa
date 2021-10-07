@@ -7,12 +7,12 @@ function submit(x) {
         $('[name="sup_addr"]').val("");
         $('[name="sup_phn"]').val("");
         $('#transaksiModal .modal-title').html('Add Supplier');
-        $('[name="sup_no"]').prop('readonly', true);
+        $('[name="sup_no"]').prop('readonly', false);
         $('[name="ubah"]').hide();
         $('[name="tambah"]').show();
     } else {
         $('#transaksiModal .modal-title').html('Edit Supplier');
-        $('[name="sup_no"]').prop('readonly', true);
+        $('[name="sup_no"]').prop('readonly', false);
         $('[name="tambah"]').hide();
         $('[name="ubah"]').show();
 

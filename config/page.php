@@ -59,6 +59,6 @@
     }
     else{
         $home = true;
-        $views = 'views/listcust`.php';
+        $views = 'views/dashboard.php';
     }
 ?>

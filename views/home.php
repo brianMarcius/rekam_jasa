@@ -12,7 +12,7 @@ function submit(x) {
         $('[name="tambah"]').show();
     } else {
         $('#transaksiModal .modal-title').html('Edit Transaksi');
-        $('[name="transaksi_no"]').prop('readonly', true);
+        $('[name="transaksi_no"]').prop('readonly', false);
         $('[name="tambah"]').hide();
         $('[name="ubah"]').show();
 

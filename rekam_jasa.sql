@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 04, 2021 at 08:53 AM
+-- Generation Time: Oct 07, 2021 at 06:50 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.10
 
@@ -20,6 +20,35 @@ SET time_zone = "+00:00";
 --
 -- Database: `rekam_jasa`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `asset`
+--
+
+CREATE TABLE `asset` (
+  `id_asset` int(11) NOT NULL,
+  `idcat` int(11) NOT NULL,
+  `idbrand` int(11) NOT NULL,
+  `id_aloc` int(11) NOT NULL,
+  `id_sup` int(11) NOT NULL,
+  `idtipe` int(11) NOT NULL,
+  `asset_no` varchar(50) NOT NULL,
+  `nama_asset` varchar(50) NOT NULL,
+  `sn` varchar(50) NOT NULL,
+  `pd` date NOT NULL,
+  `harga` varchar(50) NOT NULL,
+  `status` enum('Active','Rusak','Hilang','Perbaikan') NOT NULL,
+  `descr` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `asset`
+--
+
+INSERT INTO `asset` (`id_asset`, `idcat`, `idbrand`, `id_aloc`, `id_sup`, `idtipe`, `asset_no`, `nama_asset`, `sn`, `pd`, `harga`, `status`, `descr`) VALUES
+(1, 6, 4, 1, 1, 2, 'ASSET00001', 'asdasdasdasdasd', '00200200020002', '2019-01-14', '150.000', 'Active', '');
 
 -- --------------------------------------------------------
 
@@ -96,23 +125,24 @@ INSERT INTO `category` (`idcat`, `namacat`, `cat_no`) VALUES
 CREATE TABLE `customer` (
   `idcust` int(11) NOT NULL,
   `nama` varchar(50) NOT NULL,
-  `addr` varchar(50) NOT NULL,
+  `addr` varchar(150) NOT NULL,
   `phn` varchar(50) NOT NULL,
   `nik` varchar(50) NOT NULL,
   `ins` date NOT NULL,
   `exp` date NOT NULL,
   `cust_no` varchar(50) NOT NULL,
-  `id_type` enum('KTP','NPWP','PASSPORT','SIM') NOT NULL
+  `id_type` enum('KTP','NPWP','PASSPORT','SIM') NOT NULL,
+  `status` enum('Active','Inactive') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`idcust`, `nama`, `addr`, `phn`, `nik`, `ins`, `exp`, `cust_no`, `id_type`) VALUES
-(9, 'kadalnggledak', 'kadalgurun', '1235+6214632', '08132132400003', '2021-09-01', '2021-09-02', 'CUST00001', 'NPWP'),
-(10, 'pitikss', 'kadalgurunas', '086769988554', '08132132400003', '2021-08-28', '2021-09-28', 'CUST00002', 'NPWP'),
-(12, 'ndasulo', 'goronggorong', '789789789', '456456456', '2021-10-01', '2021-10-10', 'CUST00003', 'SIM');
+INSERT INTO `customer` (`idcust`, `nama`, `addr`, `phn`, `nik`, `ins`, `exp`, `cust_no`, `id_type`, `status`) VALUES
+(9, 'kadalnggledak', 'kadalgurun', '1235+6214632', '08132132400003', '2021-09-01', '2021-11-30', 'CUST00001', 'NPWP', 'Active'),
+(10, 'pitikss', 'kadalgurunas', '086769988554', '08132132400003', '2021-08-28', '2021-08-04', 'CUST00002', 'NPWP', 'Active'),
+(12, 'ndasulo', 'goronggorong', '789789789', '456456456', '2021-10-01', '2021-10-10', 'CUST00003', 'SIM', 'Active');
 
 -- --------------------------------------------------------
 
@@ -251,12 +281,23 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `nama`, `un`, `pw`, `lv`) VALUES
-(1, 'bbbbbccc', 'aaaaaa', '$2y$10$kYg6cJ2mOpFvrpib5Wx3geTv9i39PFpfvm/Bp3z8ZRa', 'User'),
+(1, 'bbbbbccc', 'aaaaaa', '$2y$10$fZJULPgt1U03LoOtp16ZIuBtEAJJVB2sqP8sou.HvES', 'User'),
 (2, 'adminnn', 'admin', '$2y$10$Yy4Ji00BeeBU.Q7AeM4HL.keMjGptrdRhZwSN/iVbsw', 'Admin');
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `asset`
+--
+ALTER TABLE `asset`
+  ADD PRIMARY KEY (`id_asset`),
+  ADD KEY `fk_asset_brand` (`idbrand`),
+  ADD KEY `fk_asset_cat` (`idcat`),
+  ADD KEY `fk_asset_tipe` (`idtipe`),
+  ADD KEY `fk_asset_aloc` (`id_aloc`),
+  ADD KEY `fk_asset_sup` (`id_sup`);
 
 --
 -- Indexes for table `asset_loc`
@@ -328,6 +369,12 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `asset`
+--
+ALTER TABLE `asset`
+  MODIFY `id_asset` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `asset_loc`
 --
 ALTER TABLE `asset_loc`
@@ -390,6 +437,16 @@ ALTER TABLE `user`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `asset`
+--
+ALTER TABLE `asset`
+  ADD CONSTRAINT `fk_asset_aloc` FOREIGN KEY (`id_aloc`) REFERENCES `asset_loc` (`id_aloc`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_asset_brand` FOREIGN KEY (`idbrand`) REFERENCES `brand` (`idbrand`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_asset_cat` FOREIGN KEY (`idcat`) REFERENCES `category` (`idcat`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_asset_sup` FOREIGN KEY (`id_sup`) REFERENCES `sup` (`id_sup`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `fk_asset_tipe` FOREIGN KEY (`idtipe`) REFERENCES `tipe` (`idtipe`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `brand`

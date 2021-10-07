@@ -25,7 +25,7 @@ function submit(x) {
             data: {
                 id: x
             },
-            url: '<?=base_url();?>process/_user.php',
+            url: '<?=base_url();?>process/view_user.php',
             dataType: 'json',
             success: function(data) {
                 $('[name="id"]').val(data.id);

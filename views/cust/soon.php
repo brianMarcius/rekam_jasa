@@ -11,12 +11,13 @@ function submit(x) {
         $('[name="exp"]').val("");
         $('[name="id_type"]').val("");
         $('#transaksiModal .modal-title').html('Add Customer');
-        $('[name="cust_no"]').prop('readonly', true);
+        $('[name="cust_no"]').prop('readonly', false);
         $('[name="ubahsoon"]').hide();
         $('[name="tambah"]').show();
     } else {
         $('#transaksiModal .modal-title').html('Edit Customer');
         $('[name="cust_no"]').prop('readonly', true);
+        $('[name="exp"]').prop('readonly', true);
         $('[name="tambah"]').hide();
         $('[name="ubahsoon"]').show();
 
@@ -25,18 +26,12 @@ function submit(x) {
             data: {
                 id: x
             },
-            url: '<?=base_url();?>process/_listcust.php',
+            url: '<?=base_url();?>process/view_listcust.php',
             dataType: 'json',
             success: function(data) {
                 $('[name="idcust"]').val(data.idcust);
-                $('[name="cust_no"]').val(data.cust_no);
-                $('[name="nama"]').val(data.nama);
-                $('[name="addr"]').val(data.addr);
-                $('[name="phn"]').val(data.phn);
-                $('[name="nik"]').val(data.nik);
-                $('[name="ins"]').val(data.ins);
                 $('[name="exp"]').val(data.exp);
-                $('[name="id_type"]').val(data.id_type);
+                $('[name="renew"]').val(data.id_type);
             }
         });
     }
@@ -56,13 +51,11 @@ function submit(x) {
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th width="20">NO</th>
-                            <th>Customer Name</th>
-                            <th>KTP/NIK</th>
-                            <th>Address</th>
-                            <th>Installation Date</th>
-                            <th>Expired Date</th>
-                            <th width="50">Action</th>
+                            <th width="5%">NO</th>
+                            <th width="50%">Customer Name</th>
+                            <th width="18%">Installation Date</th>
+                            <th bgcolor="#ffff94" width="15%">Expired Date</th>
+                            <th width="10$">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,10 +67,8 @@ function submit(x) {
                         <tr>
                             <td><?= $n++; ?></td>
                             <td><?= $row['nama']; ?></td>
-                            <td><?= $row['nik']; ?></td>
-                            <td><?= $row['addr']; ?></td>
                             <td><?= $row['ins']; ?></td>
-                            <td><?= $row['exp']; ?></td>
+                            <td bgcolor="#ffff94"><?= $row['exp']; ?></td>
                             <td><center>
                                 <a href="#transaksiModal" data-toggle="modal"
                                     onclick="submit(<?=$row['idcust'];?>)" class="btn btn-sm btn-circle btn-info"
@@ -110,22 +101,12 @@ function submit(x) {
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-9">
+                        <div class="col-md-4">
                             <div class="form-group">
-                                <label for="nama">Customer Name <span class="text-danger">*</span></label>
-                                <input name="nama" id="nama" type="text" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="ins">Installation Date  <span class="text-danger">*</span></label>
-                                <input name="ins" id="ins" type="date" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="col-md-9">
-                            <div class="form-group">
-                                <label for="addr">Customer Address <span class="text-danger">*</span></label>
-                                <input name="addr" id="addr" type="text" class="form-control" required>
+                                <label for="cust_no">Nomor Transaksi <span class="text-danger">*</span></label>
+                                <input type="hidden" name="cust_no">
+                                <input type="text" class="form-control" id="cust_no" name="cust_no"
+                                    value="<?= noCustomer(); ?>" required>
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -134,34 +115,14 @@ function submit(x) {
                                 <input name="exp" id="exp" type="date" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="phn">Customer Phone <span class="text-danger">*</span></label>
-                                <input name="phn" id="phn" type="text"  class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="nik">Customer Identity <span class="text-danger">*</span></label>
-                                <input name="nik" id="nik" type="text" class="form-control" required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="cust_no">Nomor Transaksi <span class="text-danger">*</span></label>
-                                <input type="hidden" name="idcust">
-                                <input type="text" class="form-control" id="cust_no" name="cust_no"
-                                    value="<?= noCustomer(); ?>" required>
-                            </div>
-                        </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Identity Type</label>
-                                <select name="id_type" class="form-control" required>
-                                    <option value="KTP">KTP</option>
-                                    <option value="NPWP">NPWP</option>
-                                    <option value="PASSPORT">PASSPORT</option>
-                                    <option value="SIM">SIM</option>
+                                <label>Select Renewal</label>
+                                <select name="renew" class="form-control" required>
+                                    <option value="1">1 Month</option>
+                                    <option value="2">2 Month</option>
+                                    <option value="3">3 Month</option>
+                                    <option value="4">4 Month</option>
                                 </select>
                             </div>
                         </div>

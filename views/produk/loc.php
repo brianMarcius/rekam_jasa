@@ -5,12 +5,12 @@ function submit(x) {
         $('[name="aloc_no"]').val("<?=noAloc();?>");
         $('[name="aloc_name"]').val("");
         $('#transaksiModal .modal-title').html('Add Location');
-        $('[name="aloc_no"]').prop('readonly', true);
+        $('[name="aloc_no"]').prop('readonly', false);
         $('[name="ubah"]').hide();
         $('[name="tambah"]').show();
     } else {
         $('#transaksiModal .modal-title').html('Edit Location');
-        $('[name="aloc_no"]').prop('readonly', true);
+        $('[name="aloc_no"]').prop('readonly', false);
         $('[name="tambah"]').hide();
         $('[name="ubah"]').show();
 

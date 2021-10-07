@@ -7,6 +7,9 @@ if (!empty($_POST)) {
         case 'list_brand2':
             list_brand2($data);
             break;
+        case 'list_tipe':
+                list_tipe($data);
+                break;
         default:
             //function not found, error or something
             break;
@@ -188,6 +191,32 @@ function noSup(){
     return $kodeBarang;
 }
 
+function noAsset(){
+    include ('conn.php');
+    // mencari kode barang dengan nilai paling besar
+    $query = "SELECT MAX(asset_no) as maxKode FROM asset";
+    $hasil = mysqli_query($con,$query);
+    $data = mysqli_fetch_array($hasil);
+    $kodeBarang = $data['maxKode'];
+
+    // mengambil angka atau bilangan dalam kode anggota terbesar,
+    // dengan cara mengambil substring mulai dari karakter ke-1 diambil 6 karakter
+    // misal 'TRX00001', akan diambil '001'
+    // setelah substring bilangan diambil lantas dicasting menjadi integer
+    $noUrut = (int) substr($kodeBarang, 5, 5);
+
+    // bilangan yang diambil ini ditambah 1 untuk menentukan nomor urut berikutnya
+    $noUrut++;
+
+    // membentuk kode anggota baru
+    // perintah sprintf("%03s", $noUrut); digunakan untuk memformat string sebanyak 3 karakter
+    // misal sprintf("%03s", 12); maka akan dihasilkan '012'
+    // atau misal sprintf("%03s", 1); maka akan dihasilkan string '001'
+    $char = "ASSET";
+    $kodeBarang = $char . sprintf("%05s", $noUrut);
+    return $kodeBarang;
+}
+
 
 function list_jasa(){
     include ('conn.php');
@@ -205,6 +234,26 @@ function list_cat(){
     $opt = "";
     while($row = mysqli_fetch_array($query)){
         $opt .= "<option value=\"".$row['idcat']."\">".$row['namacat']."</option>";
+    }  
+    echo $opt; 
+}
+
+function list_sup(){
+    include ('conn.php');
+    $query = mysqli_query($con,"SELECT * FROM sup ORDER BY sup_name ASC");
+    $opt = "";
+    while($row = mysqli_fetch_array($query)){
+        $opt .= "<option value=\"".$row['id_sup']."\">".$row['sup_name']."</option>";
+    }  
+    echo $opt; 
+}
+
+function list_aloc(){
+    include ('conn.php');
+    $query = mysqli_query($con,"SELECT * FROM asset_loc ORDER BY aloc_name ASC");
+    $opt = "";
+    while($row = mysqli_fetch_array($query)){
+        $opt .= "<option value=\"".$row['id_aloc']."\">".$row['aloc_name']."</option>";
     }  
     echo $opt; 
 }
@@ -227,6 +276,16 @@ function list_brand2($idcat){
         $opt1 .= "<option value=\"".$row['idbrand']."\">".$row['namabrand']."</option>";
     }  
     echo $opt1; 
+}
+
+function list_tipe($idbrand){
+    include ('conn.php');
+    $query = mysqli_query($con,"SELECT * FROM tipe WHERE idbrand=$idbrand ORDER BY namatipe ASC");
+    $opt = '<option value="">-- Choose Tipe --</option>';
+    while($row = mysqli_fetch_array($query)){
+        $opt .= "<option value=\"".$row['idtipe']."\">".$row['namatipe']."</option>";
+    }  
+    echo $opt; 
 }
 
 

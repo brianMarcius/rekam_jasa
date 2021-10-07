@@ -14,11 +14,12 @@ if(isset($_POST['tambah'])){
     $cust_no = $_POST['cust_no'];
     $exp = $_POST['exp'];
     $id_type = $_POST['id_type'];
-
+    $status = $_POST['status'];
 
     $cekNomor = mysqli_query($con,"SELECT * FROM customer WHERE cust_no='$cust_no'") or die(mysqli_error($con));
     if(mysqli_num_rows($cekNomor)==0){
-        $insert = mysqli_query($con,"INSERT INTO customer (idcust, cust_no, nama, addr, phn, nik, ins, exp,id_type) VALUES ('$idcust','$cust_no','$nama','$addr','$phn','$nik','$ins','$exp','$id_type')") or die (mysqli_error($con));
+        $insert = mysqli_query($con,"INSERT INTO customer (idcust, cust_no, nama, addr, phn, nik, ins, exp, id_type, status)
+         VALUES ('$idcust','$cust_no','$nama','$addr','$phn','$nik','$ins','$exp','$id_type','$status')") or die (mysqli_error($con));
         if($insert){
             $success = 'Berhasil menambahkan data transaksi';
         }else{
@@ -42,8 +43,10 @@ if(isset($_POST['ubah'])){
     $inscust = $_POST['ins'];
     $expcust = $_POST['exp'];
     $id_type = $_POST['id_type'];
+    $status = $_POST['status'];
 
-    $update = mysqli_query($con,"UPDATE customer SET cust_no='$cust_no', nama='$namacust', addr='$addrcust', phn='$phncust', ins='$inscust', exp='$expcust', nik='$nikcust',id_type='$id_type' WHERE idcust='$idcust'") or die (mysqli_error($con));
+    $update = mysqli_query($con,"UPDATE customer SET cust_no='$cust_no', nama='$namacust', addr='$addrcust', phn='$phncust', 
+    ins='$inscust', exp='$expcust', nik='$nikcust',id_type='$id_type',status='$status' WHERE idcust='$idcust'") or die (mysqli_error($con));
 
     // var_dump($update);die;
     if($update){
@@ -58,16 +61,10 @@ if(isset($_POST['ubah'])){
 
 if(isset($_POST['ubahsoon'])){
     $idcust = $_POST['idcust'];
-    $namacust = $_POST['nama'];
-    $addrcust = $_POST['addr'];
-    $phncust = $_POST['phn'];
-    $nikcust = $_POST['nik'];
-    $cust_no = $_POST['cust_no'];
-    $inscust = $_POST['ins'];
     $expcust = $_POST['exp'];
-    $id_type = $_POST['id_type'];
+    $renew = $_POST['renew'];
 
-    $update = mysqli_query($con,"UPDATE customer SET cust_no='$cust_no', nama='$namacust', addr='$addrcust', phn='$phncust', ins='$inscust', exp='$expcust', nik='$nikcust',id_type='$id_type' WHERE idcust='$idcust'") or die (mysqli_error($con));
+    $update = mysqli_query($con,"UPDATE customer SET exp=DATE_ADD(exp, interval '$renew' MONTH) WHERE idcust='$idcust'") or die (mysqli_error($con));;
 
     // var_dump($update);die;
     if($update){
@@ -82,16 +79,10 @@ if(isset($_POST['ubahsoon'])){
 
 if(isset($_POST['ubahexp'])){
     $idcust = $_POST['idcust'];
-    $namacust = $_POST['nama'];
-    $addrcust = $_POST['addr'];
-    $phncust = $_POST['phn'];
-    $nikcust = $_POST['nik'];
-    $cust_no = $_POST['cust_no'];
-    $inscust = $_POST['ins'];
     $expcust = $_POST['exp'];
-    $id_type = $_POST['id_type'];
+    $renew = $_POST['renew'];
 
-    $update = mysqli_query($con,"UPDATE customer SET cust_no='$cust_no', nama='$namacust', addr='$addrcust', phn='$phncust', ins='$inscust', exp='$expcust', nik='$nikcust',id_type='$id_type' WHERE idcust='$idcust'") or die (mysqli_error($con));
+    $update = mysqli_query($con,"UPDATE customer SET exp=DATE_ADD(exp, interval '$renew' MONTH) WHERE idcust='$idcust'") or die (mysqli_error($con));
 
     // var_dump($update);die;
     if($update){

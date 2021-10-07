@@ -5,12 +5,12 @@ function submit(x) {
         $('[name="cat_no"]').val("<?=noCategory();?>");
         $('[name="namacat"]').val("");
         $('#transaksiModal .modal-title').html('Add Category');
-        $('[name="cat_no"]').prop('readonly', true);
+        $('[name="cat_no"]').prop('readonly', false);
         $('[name="ubah"]').hide();
         $('[name="tambah"]').show();
     } else {
         $('#transaksiModal .modal-title').html('Edit Category');
-        $('[name="cat_no"]').prop('readonly', true);
+        $('[name="cat_no"]').prop('readonly', false);
         $('[name="tambah"]').hide();
         $('[name="ubah"]').show();
 

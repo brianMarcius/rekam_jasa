@@ -6,12 +6,12 @@ function submit(x) {
         $('[name="idcat"]').val("").trigger('change');
         $('[name="namabrand"]').val("");
         $('#transaksiModal .modal-title').html('Add Brand');
-        $('[name="brand_no"]').prop('readonly', true);
+        $('[name="brand_no"]').prop('readonly', false);
         $('[name="ubah"]').hide();
         $('[name="tambah"]').show();
     } else {
         $('#transaksiModal .modal-title').html('Edit Brand');
-        $('[name="brand_no"]').prop('readonly', true);
+        $('[name="brand_no"]').prop('readonly', false);
         $('[name="tambah"]').hide();
         $('[name="ubah"]').show();
 
@@ -20,7 +20,7 @@ function submit(x) {
             data: {
                 id: x
             },
-            url: '<?=base_url();?>process/_brand.php',
+            url: '<?=base_url();?>process/view_brand.php',
             dataType: 'json',
             success: function(data) {
                 $('[name="idbrand"]').val(data.idbrand);

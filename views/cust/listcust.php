@@ -10,13 +10,14 @@ function submit(x) {
         $('[name="ins"]').val("");
         $('[name="exp"]').val("");
         $('[name="id_type"]').val("");
+        $('[name="status"]').val("");
         $('#transaksiModal .modal-title').html('Add Customer');
-        $('[name="cust_no"]').prop('readonly', true);
+        $('[name="cust_no"]').prop('readonly', false);
         $('[name="ubah"]').hide();
         $('[name="tambah"]').show();
     } else {
         $('#transaksiModal .modal-title').html('Edit Customer');
-        $('[name="cust_no"]').prop('readonly', true);
+        $('[name="cust_no"]').prop('readonly', false);
         $('[name="tambah"]').hide();
         $('[name="ubah"]').show();
 
@@ -25,7 +26,7 @@ function submit(x) {
             data: {
                 id: x
             },
-            url: '<?=base_url();?>process/_listcust.php',
+            url: '<?=base_url();?>process/view_listcust.php',
             dataType: 'json',
             success: function(data) {
                 $('[name="idcust"]').val(data.idcust);
@@ -36,7 +37,8 @@ function submit(x) {
                 $('[name="nik"]').val(data.nik);
                 $('[name="ins"]').val(data.ins);
                 $('[name="exp"]').val(data.exp);
-                $('[name="id_type"]').val(data.id_type);
+                $('[name="id_type"]').val(data.id_type).trigger('change');
+                $('[name="status"]').val(data.status).trigger('change');
             }
         });
     }
@@ -65,13 +67,10 @@ function submit(x) {
                 <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th width="20">NO</th>
-                            <th>Customer Name</th>
-                            <th>KTP/NIK</th>
-                            <th>Address</th>
-                            <th>Installation Date</th>
-                            <th>Expired Date</th>
-                            <th width="50">Action</th>
+                            <th width="1%">NO</th>
+                            <th width="40%">Customer Name</th>
+                            <th width="10%">Service Status</th>
+                            <th width="5%">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,10 +82,7 @@ function submit(x) {
                         <tr>
                             <td><?= $n++; ?></td>
                             <td><?= $row['nama']; ?></td>
-                            <td><?= $row['nik']; ?></td>
-                            <td><?= $row['addr']; ?></td>
-                            <td><?= $row['ins']; ?></td>
-                            <td><?= $row['exp']; ?></td>
+                            <td><center><?= $row['status']; ?></center></td>
                             <td><center>
                                 <a href="#transaksiModal" data-toggle="modal"
                                     onclick="submit(<?=$row['idcust'];?>)" class="btn btn-sm btn-circle btn-info"
@@ -168,7 +164,7 @@ function submit(x) {
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Identity Type</label>
+                                <label>Identity Type <span class="text-danger">*</span></label>
                                 <select name="id_type" class="form-control" required>
                                     <option value="KTP">KTP</option>
                                     <option value="NPWP">NPWP</option>
@@ -177,12 +173,21 @@ function submit(x) {
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>Set Service Status <span class="text-danger">*</span></label>
+                                <select name="status" class="form-control" required>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     
                     <hr class="sidebar-divider">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal"><i class="fas fa-times"></i>
                         Batal</button>
-                    <button class="btn btn-primary float-right" type="submit" name="tambah"><i class="fas fa-save"></i>
+                    <button class="btn btn-primary float-right" type="submit" name="tambah"><i class="fas fa-check"></i>
                         Tambah</button>
                     <button class="btn btn-primary float-right" type="submit" name="ubah"><i class="fas fa-save"></i>
                         Ubah</button>

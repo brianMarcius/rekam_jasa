@@ -86,7 +86,7 @@ $(document).ready(function() {
 })
 </script>
 <script>
-    $('#idcat').on('select2:select', function (e) {
+    $('#idcat').on('change', function (e) {
     console.log('tesrfasd');
     var idcat = $(this).val();
     $.ajax({
@@ -98,6 +98,24 @@ $(document).ready(function() {
         },
         success: function(data){
             $("#idbrand").html(data);
+        }
+    })
+})
+
+</script>
+<script>
+    $('#idbrand').on('change', function (e) {
+    console.log('tesrfasd');
+    var idbrand = $(this).val();
+    $.ajax({
+        type: "POST",
+        url: '<?=base_url();?>config/function.php',
+        data:{
+            func : "list_tipe",
+            data : idbrand 
+        },
+        success: function(data){
+            $("#idtipe").html(data);
         }
     })
 })
