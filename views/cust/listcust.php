@@ -1,6 +1,6 @@
 <?php hakAkses(['Admin','User']); date_default_timezone_set("Asia/Jakarta"); ?>
 <script>
-function submit(x) {
+function submit(x,view = 0) {
     if (x == 'add') {
         $('[name="cust_no"]').val("<?=noCustomer();?>");
         $('[name="nama"]').val("");
@@ -16,6 +16,9 @@ function submit(x) {
         $('[name="ubah"]').hide();
         $('[name="tambah"]').show();
     } else {
+        $("#transaksiModal input").prop("disabled", false);
+        $("#transaksiModal select").prop("disabled", false);
+        
         $('#transaksiModal .modal-title').html('Edit Customer');
         $('[name="cust_no"]').prop('readonly', false);
         $('[name="tambah"]').hide();
@@ -41,6 +44,13 @@ function submit(x) {
                 $('[name="status"]').val(data.status).trigger('change');
             }
         });
+
+        if (view) {
+            $('#transaksiModal .modal-title').html('View Customer');
+            $("#transaksiModal input").prop("disabled", true);
+            $("#transaksiModal select").prop("disabled", true);
+            $("[name='ubah']").hide();
+        }
     }
 }
 </script>
@@ -84,6 +94,10 @@ function submit(x) {
                             <td><?= $row['nama']; ?></td>
                             <td><center><?= $row['status']; ?></center></td>
                             <td><center>
+                                <a href="#transaksiModal" data-toggle="modal"
+                                    onclick="submit(<?=$row['idcust'];?>,1)" class="btn btn-sm btn-circle btn-warning"
+                                    data-toggle="tooltip" data-placement="top" title="View Data"><i
+                                        class="fas fa-eye"></i></a>
                                 <a href="#transaksiModal" data-toggle="modal"
                                     onclick="submit(<?=$row['idcust'];?>)" class="btn btn-sm btn-circle btn-info"
                                     data-toggle="tooltip" data-placement="top" title="Ubah Data"><i

@@ -1,8 +1,8 @@
 <?php
 
-if (!empty($_POST)) {
+if (!empty($_POST['func'])) {
     $func = $_POST['func'];
-    $data = $_POST['data'];
+    $data = (!empty($_POST['data'])) ? $_POST['data'] : '' ;
     switch ($func) {
         case 'list_brand2':
             list_brand2($data);
@@ -10,10 +10,30 @@ if (!empty($_POST)) {
         case 'list_tipe':
                 list_tipe($data);
                 break;
+        case 'getInstallation':
+            getInstallation();
+                break;
         default:
             //function not found, error or something
             break;
     }
+}
+
+function getInstallation(){
+    include ('conn.php');
+
+    $tahun = date('Y');
+    $sql = "SELECT count(idcust) customer, date_format(ins,'%c') bulan FROM `customer` group by date_format(ins,'%c')";
+    $query = mysqli_query($con,$sql);
+    $data = array();
+    while ($d = mysqli_fetch_array($query)) {
+        $fetch = array();
+        $fetch['bulan'] = $d['bulan'];
+        $fetch['customer'] = $d['customer'];
+        $data[] = $fetch;
+    }
+
+    echo json_encode($data);
 }
 
 

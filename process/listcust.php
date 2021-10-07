@@ -18,8 +18,8 @@ if(isset($_POST['tambah'])){
 
     $cekNomor = mysqli_query($con,"SELECT * FROM customer WHERE cust_no='$cust_no'") or die(mysqli_error($con));
     if(mysqli_num_rows($cekNomor)==0){
-        $insert = mysqli_query($con,"INSERT INTO customer (idcust, cust_no, nama, addr, phn, nik, ins, exp, id_type, status)
-         VALUES ('$idcust','$cust_no','$nama','$addr','$phn','$nik','$ins','$exp','$id_type','$status')") or die (mysqli_error($con));
+        $insert = mysqli_query($con,"INSERT INTO customer ( cust_no, nama, addr, phn, nik, ins, exp, id_type, status)
+         VALUES ('$cust_no','$nama','$addr','$phn','$nik','$ins','$exp','$id_type','$status')") or die (mysqli_error($con));
         if($insert){
             $success = 'Berhasil menambahkan data transaksi';
         }else{
