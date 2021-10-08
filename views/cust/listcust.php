@@ -42,15 +42,30 @@ function submit(x,view = 0) {
                 $('[name="exp"]').val(data.exp);
                 $('[name="id_type"]').val(data.id_type).trigger('change');
                 $('[name="status"]').val(data.status).trigger('change');
+
+                if (view) {
+                    $('#viewModal .modal-title').html('View Modal');
+                    $('#view_no_transaksi').html(data.cust_no);
+                    $('#view_customer_name').html(data.nama);
+                    $('#view_customer_address').html(data.addr);
+                    $('#view_customer_phone').html(data.phn);
+                    $('#view_customer_identity').html(data.nik);
+                    $('#view_installation_date').html(data.ins);
+                    $('#view_expired_date').html(data.exp);
+                    $('#view_identity_type').html(data.id_type);
+                    $('#view_service_status').html(data.status);
+                    if (data.status=='Active') {
+                        $('#view_service_status').removeClass('badge-danger');
+                        $('#view_service_status').addClass('badge-success');
+                    }else{
+                        $('#view_service_status').removeClass('badge-success');
+                        $('#view_service_status').addClass('badge-danger');
+                    }
+                }
             }
         });
 
-        if (view) {
-            $('#transaksiModal .modal-title').html('View Customer');
-            $("#transaksiModal input").prop("disabled", true);
-            $("#transaksiModal select").prop("disabled", true);
-            $("[name='ubah']").hide();
-        }
+        
     }
 }
 </script>
@@ -94,8 +109,8 @@ function submit(x,view = 0) {
                             <td><?= $row['nama']; ?></td>
                             <td><center><?= $row['status']; ?></center></td>
                             <td><center>
-                                <a href="#transaksiModal" data-toggle="modal"
-                                    onclick="submit(<?=$row['idcust'];?>,1)" class="btn btn-sm btn-circle btn-warning"
+                                <a href="#viewModal" data-toggle="modal"
+                                    onclick="submit(<?=$row['idcust'];?>,'1')" class="btn btn-sm btn-circle btn-warning"
                                     data-toggle="tooltip" data-placement="top" title="View Data"><i
                                         class="fas fa-eye"></i></a>
                                 <a href="#transaksiModal" data-toggle="modal"
@@ -205,6 +220,80 @@ function submit(x,view = 0) {
                         Tambah</button>
                     <button class="btn btn-primary float-right" type="submit" name="ubah"><i class="fas fa-save"></i>
                         Ubah</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="viewModal" tabindex="-1" role="dialog" aria-labelledby="viewModalLabel"
+    aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <form action="<?=base_url();?>process/listcust.php" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewModalLabel"></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table class="table table-borderless">
+                                    <tr>
+                                        <td><label class="font-weight-bold" for="view_customer_name">Customer Name</label></td>
+                                        <td style="width:3%">:</td>
+                                        <td><span id="view_customer_name"></span></td>
+                                        <td>&nbsp;&nbsp;&nbsp;</td>
+                                        <td><label class="font-weight-bold" for="view_installation_date">Installation Date </label></td>
+                                        <td style="width:3%">:</td>
+                                        <td><span id="view_installation_date"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="font-weight-bold" for="ins">Customer Address :</label></td>
+                                        <td style="width:3%">:</td>
+                                        <td><span id="view_customer_address"></span></td>
+                                        <td>&nbsp;&nbsp;&nbsp;</td>
+                                        <td><label class="font-weight-bold" for="view_expired_date">Expired Date :</label></td>
+                                        <td style="width:3%">:</td>
+                                        <td><span id="view_expired_date"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="font-weight-bold" for="view_customer_phone">Customer Phone :</label></td>
+                                        <td style="width:3%">:</td>
+                                        <td><span id="view_customer_phone"></span></td>
+                                        <td>&nbsp;&nbsp;&nbsp;</td>
+                                        <td><label class="font-weight-bold" for="view_customer_identity">Customer Identity :</label></td>
+                                        <td style="width:3%">:</td>
+                                        <td><span id="view_customer_identity"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="font-weight-bold" for="view_no_transaksi">No Transaksi :</label></td>
+                                        <td style="width:3%">:</td>
+                                        <td><span id="view_no_transaksi"></span></td>
+                                        <td>&nbsp;&nbsp;&nbsp;</td>
+                                        <td><label class="font-weight-bold" for="view_identity_type">Identity Type :</label></td>
+                                        <td style="width:3%">:</td>
+                                        <td><span id="view_identity_type"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label class="font-weight-bold" for="view_service_status">Status :</label></td>
+                                        <td style="width:3%">:</td>
+                                        <td><span class="badge badge-success" id="view_service_status"></span></td>
+                                        <td>&nbsp;&nbsp;&nbsp;</td>
+                                        <td></td>
+                                        <td style="width:3%"></td>
+                                        <td></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <hr class="sidebar-divider">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal"><i class="fas fa-times"></i>
+                        Batal</button>
                 </div>
             </form>
         </div>
