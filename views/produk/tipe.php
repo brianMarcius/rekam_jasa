@@ -70,28 +70,28 @@ function submit(x) {
                             <th>Category Name</th>
                             <th>Brand Name</th>
                             <th>Type</th>
-                            <th width="50">AKSI</th>
+                            <th width="1%"><center>&nbsp;&nbsp;&nbsp;&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;</center></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
                         $n=1;
-                        $query = mysqli_query($con,"SELECT * FROM category x, brand x1, tipe x2 WHERE x2.idbrand=x1.idbrand and x2.idcat=x.idcat ORDER BY x.namacat DESC") or die(mysqli_error($con));
+                        $query = mysqli_query($con,"SELECT * FROM category x, brand x1, tipe x2 WHERE x2.idbrand=x1.idbrand and x2.idcat=x.idcat and x2.data_status='Enable' ORDER BY x.namacat DESC") or die(mysqli_error($con));
                         while($row = mysqli_fetch_array($query)):
                         ?>
                         <tr>
-                            <td><?= $n++; ?></td>
+                        <td><center><?= $n++; ?></center></td>
                             <td><?= $row['namacat']; ?></td>
                             <td><?= $row['namabrand']; ?></td>
                             <td><?= $row['namatipe']; ?></td>
-                            <td>
+                            <td><center>
                                 <a href="#transaksiModal" data-toggle="modal"
                                     onclick="submit(<?=$row['idtipe'];?>)" class="btn btn-sm btn-circle btn-info"
                                     data-toggle="tooltip" data-placement="top" title="Ubah Data"><i
                                         class="fas fa-edit"></i></a>
-                                <a href="<?=base_url();?>process/tipe.php?act=<?=encrypt('delete');?>&id=<?=encrypt($row['idtipe']);?>"
+                                <a href="<?=base_url();?>process/tipe.php?act=<?=encrypt('delete');?>&idtipe=<?=encrypt($row['idtipe']);?>"
                                     class="btn btn-sm btn-circle btn-danger btn-hapus" data-toggle="tooltip"
-                                    data-placement="top" title="Hapus Data"><i class="fas fa-trash"></i></a>
+                                    data-placement="top" title="Hapus Data"><i class="fas fa-trash"></i></a></center>
                             </td>
                         </tr>
                         <?php endwhile; ?>

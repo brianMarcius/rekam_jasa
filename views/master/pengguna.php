@@ -4,7 +4,6 @@ function submit(x) {
     if (x == 'add') {
         $('[name="username"]').val("");
         $('[name="nama"]').val("");
-        $('[name="no_hp"]').val("");
         $('[name="level"]').val("");
         $('#penggunaModal .modal-title').html('Add User');
         $('[name="username"]').prop('readonly', false);
@@ -28,10 +27,10 @@ function submit(x) {
             url: '<?=base_url();?>process/view_user.php',
             dataType: 'json',
             success: function(data) {
-                $('[name="id"]').val(data.id);
-                $('[name="username"]').val(data.un);
-                $('[name="nama"]').val(data.nama);
-                $('[name="level"]').val(data.lv);
+                $('[name="id"]').val(data.idpengguna);
+                $('[name="username"]').val(data.pengguna_username);
+                $('[name="nama"]').val(data.pengguna_nama);
+                $('[name="level"]').val(data.pengguna_level);
             }
         });
     }
@@ -64,29 +63,29 @@ function submit(x) {
                             <th>NAMA LENGKAP</th>
                             <th>USERNAME</th>
                             <th>LEVEL</th>
-                            <th width="50">AKSI</th>
+                            <th width="1%"><center>&nbsp;&nbsp;&nbsp;&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;</center></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
                         $n=1;
-                        $query = mysqli_query($con,"SELECT * FROM user ORDER BY id DESC")or die(mysqli_error($con));
+                        $query = mysqli_query($con,"SELECT * FROM pengguna ORDER BY idpengguna DESC")or die(mysqli_error($con));
                         while($row = mysqli_fetch_array($query)):
                         ?>
                         <tr>
-                            <td><?= $n++; ?></td>
-                            <td><?= $row['nama']; ?></td>
-                            <td><?= $row['un']; ?></td>
-                            <td><?= $row['lv']; ?></td>
-                            <td>
-                                <?php if($row['lv']!="Admin"): ?>
-                                <a href="#penggunaModal" data-toggle="modal" onclick="submit(<?=$row['id'];?>)"
+                            <td><center><?= $n++; ?></center></td>
+                            <td><?= $row['pengguna_nama']; ?></td>
+                            <td><?= $row['pengguna_username']; ?></td>
+                            <td><?= $row['pengguna_level']; ?></td>
+                            <td><center>
+                                <?php if($row['pengguna_level']!="Admin"): ?>
+                                <a href="#penggunaModal" data-toggle="modal" onclick="submit(<?=$row['idpengguna'];?>)"
                                     class="btn btn-sm btn-circle btn-info"><i class="fas fa-edit"></i></a>
-                                <a href="<?=base_url();?>process/users.php?act=<?=encrypt('delete');?>&id=<?=encrypt($row['id']);?>"
+                                <a href="<?=base_url();?>process/users.php?act=<?=encrypt('delete');?>&idpengguna=<?=encrypt($row['idpengguna']);?>"
                                     class="btn btn-sm btn-circle btn-danger btn-hapus"><i class="fas fa-trash"></i></a>
                                 <?php else: ?>
                                 <span class="badge badge-warning">No Action</span>
-                                <?php endif; ?>
+                                <?php endif; ?></center>
                             </td>
                         </tr>
                         <?php endwhile; ?>

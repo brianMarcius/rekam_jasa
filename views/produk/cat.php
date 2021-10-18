@@ -25,6 +25,7 @@ function submit(x) {
                 $('[name="idcat"]').val(data.idcat);
                 $('[name="cat_no"]').val(data.cat_no);
                 $('[name="namacat"]').val(data.namacat);
+                $('[name="data_status"]').val(data.data_status);
             }
         });
     }
@@ -55,17 +56,16 @@ function submit(x) {
                         <tr>
                             <th width="20">NO</th>
                             <th>Category Name</th>
-                            <th width="50">Action</th>
-                        </tr>
+                            <th width="1%"><center>&nbsp;&nbsp;&nbsp;&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;</center></th>
                     </thead>
                     <tbody>
                         <?php 
                         $n=1;
-                        $query = mysqli_query($con,"SELECT * FROM category ORDER BY cat_no DESC")or die(mysqli_error($con));
+                        $query = mysqli_query($con,"SELECT * FROM category WHERE data_status='Enable' ORDER BY cat_no DESC")or die(mysqli_error($con));
                         while($row = mysqli_fetch_array($query)):
                         ?>
                         <tr>
-                            <td><?= $n++; ?></td>
+                        <td><center><?= $n++; ?></center></td>
                             <td><?= $row['namacat']; ?></td>
                             <td><center>
                                 <a href="#transaksiModal" data-toggle="modal"

@@ -13,7 +13,7 @@ if(isset($_POST['tambah'])){
 
     $cekNomor = mysqli_query($con,"SELECT * FROM tipe WHERE tipe_no='$tipe_no'") or die(mysqli_error($con));
     if(mysqli_num_rows($cekNomor)==0){
-        $insert = mysqli_query($con,"INSERT INTO tipe (tipe_no, namatipe, idcat, idbrand) VALUES ('$tipe_no','$namatipe','$idcat', '$idbrand')") or die (mysqli_error($con));
+        $insert = mysqli_query($con,"INSERT INTO tipe (data_status, tipe_no, namatipe, idcat, idbrand) VALUES ('Enable','$tipe_no','$namatipe','$idcat', '$idbrand')") or die (mysqli_error($con));
         if($insert){
             $success = 'Berhasil menambahkan data transaksi';
         }else{
@@ -34,7 +34,7 @@ if(isset($_POST['ubah'])){
     $idbrand = $_POST['idbrand'];
 
 
-    $update = mysqli_query($con,"UPDATE tipe SET tipe_no='$tipe_no', namatipe='$namatipe', idcat='$idcat', idbrand='$idbrand' WHERE idtipe='$idtipe'") or die (mysqli_error($con));
+    $update = mysqli_query($con,"UPDATE tipe SET namatipe='$namatipe', idcat='$idcat', idbrand='$idbrand' WHERE tipe_no='$tipe_no'") or die (mysqli_error($con));
 
     // var_dump($update);die;
     if($update){
@@ -50,7 +50,7 @@ if(isset($_POST['ubah'])){
 
 if(decrypt($_GET['act'])=='delete' && isset($_GET['idtipe'])!=""){
     $idtipe = decrypt($_GET['idtipe']);
-    $delete = mysqli_query($con, "DELETE FROM tipe WHERE idtipe='$idtipe'")or die(mysqli_error($con));
+    $delete = mysqli_query($con, "UPDATE tipe SET data_status='Disable' WHERE idtipe='$idtipe'")or die(mysqli_error($con));
     if ($delete) {
         $success = "Data pengguna berhasil dihapus";
     }else{

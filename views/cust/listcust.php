@@ -9,7 +9,8 @@ function submit(x,view = 0) {
         $('[name="nik"]').val("");
         $('[name="ins"]').val("");
         $('[name="exp"]').val("");
-        $('[name="id_type"]').val("");
+        $('[name="id_type"]').val("").trigger('change');
+        $('[name="id_jasa"]').val("").trigger('change');
         $('[name="status"]').val("");
         $('#transaksiModal .modal-title').html('Add Customer');
         $('[name="cust_no"]').prop('readonly', false);
@@ -41,10 +42,11 @@ function submit(x,view = 0) {
                 $('[name="ins"]').val(data.ins);
                 $('[name="exp"]').val(data.exp);
                 $('[name="id_type"]').val(data.id_type).trigger('change');
+                $('[name="id_jasa"]').val(data.id_jasa).trigger('change');
                 $('[name="status"]').val(data.status).trigger('change');
 
                 if (view) {
-                    $('#viewModal .modal-title').html('View Modal');
+                    $('#viewModal .modal-title').html('Detail Customer');
                     $('#view_no_transaksi').html(data.cust_no);
                     $('#view_customer_name').html(data.nama);
                     $('#view_customer_address').html(data.addr);
@@ -53,6 +55,8 @@ function submit(x,view = 0) {
                     $('#view_installation_date').html(data.ins);
                     $('#view_expired_date').html(data.exp);
                     $('#view_identity_type').html(data.id_type);
+                    $('#view_jasa').html(data.nama_jasa);
+                    $('#view_biaya').html(data.biaya);
                     $('#view_service_status').html(data.status);
                     if (data.status=='Active') {
                         $('#view_service_status').removeClass('badge-danger');
@@ -95,17 +99,17 @@ function submit(x,view = 0) {
                             <th width="1%">NO</th>
                             <th width="40%">Customer Name</th>
                             <th width="10%">Service Status</th>
-                            <th width="5%">Action</th>
+                            <th width="1%"><center>&nbsp;&nbsp;&nbsp;&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;</center></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
                         $n=1;
-                        $query = mysqli_query($con,"SELECT * FROM customer ORDER BY cust_no DESC")or die(mysqli_error($con));
+                        $query = mysqli_query($con,"SELECT * FROM customer WHERE data_status='Enable' ORDER BY cust_no DESC")or die(mysqli_error($con));
                         while($row = mysqli_fetch_array($query)):
                         ?>
                         <tr>
-                            <td><?= $n++; ?></td>
+                        <td><center><?= $n++; ?></center></td>
                             <td><?= $row['nama']; ?></td>
                             <td><center><?= $row['status']; ?></center></td>
                             <td><center>
@@ -147,6 +151,14 @@ function submit(x,view = 0) {
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                    <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="cust_no">Nomor Transaksi <span class="text-danger">*</span></label>
+                                <input type="hidden" name="idcust">
+                                <input type="text" class="form-control" id="cust_no" name="cust_no"
+                                    value="<?= noCustomer(); ?>" required>
+                            </div>
+                        </div>
                         <div class="col-md-9">
                             <div class="form-group">
                                 <label for="nama">Customer Name <span class="text-danger">*</span></label>
@@ -183,14 +195,6 @@ function submit(x,view = 0) {
                                 <input name="nik" id="nik" type="text" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="cust_no">Nomor Transaksi <span class="text-danger">*</span></label>
-                                <input type="hidden" name="idcust">
-                                <input type="text" class="form-control" id="cust_no" name="cust_no"
-                                    value="<?= noCustomer(); ?>" required>
-                            </div>
-                        </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Identity Type <span class="text-danger">*</span></label>
@@ -202,6 +206,16 @@ function submit(x,view = 0) {
                                 </select>
                             </div>
                         </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_jasa">Input Jasa <span class="text-danger">*</span></label>
+                                <select name="id_jasa" id="id_jasa" class="form-control select2"
+                                    style="width:100%;" required>
+                                    <option value="">-- Choose Jasa --</option>
+                                    <?= list_jj(); ?>
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Set Service Status <span class="text-danger">*</span></label>
@@ -210,7 +224,7 @@ function submit(x,view = 0) {
                                     <option value="Inactive">Inactive</option>
                                 </select>
                             </div>
-                        </div>
+                        </div>   
                     </div>
                     
                     <hr class="sidebar-divider">
@@ -229,7 +243,7 @@ function submit(x,view = 0) {
     aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form action="<?=base_url();?>process/listcust.php" method="post">
+            <form action="<?=base_url();?>#" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title" id="viewModalLabel"></h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
@@ -242,50 +256,75 @@ function submit(x,view = 0) {
                             <div class="table-responsive">
                                 <table class="table table-borderless">
                                     <tr>
-                                        <td><label class="font-weight-bold" for="view_customer_name">Customer Name</label></td>
-                                        <td style="width:3%">:</td>
-                                        <td><span id="view_customer_name"></span></td>
-                                        <td>&nbsp;&nbsp;&nbsp;</td>
-                                        <td><label class="font-weight-bold" for="view_installation_date">Installation Date </label></td>
-                                        <td style="width:3%">:</td>
-                                        <td><span id="view_installation_date"></span></td>
+                                        <td style="width:10%; padding:5px"><label class="font-weight-bold" for="view_customer_name">Customer Name</label></td>
+                                        <td style="width:3%; padding:5px">:</td>
+                                        <td style="width:25%; padding:5px"><span id="view_customer_name"></span></td>
+                                        <td style="width:3%; padding:5px"> </td>
+                                        <td style="width:10%; padding:5px"><label class="font-weight-bold" for="view_installation_date">Installation Date </label></td>
+                                        <td style="width:3%; padding:5px">:</td>
+                                        <td style="width:25%; padding:5px"><span id="view_installation_date"></span></td>
                                     </tr>
                                     <tr>
-                                        <td><label class="font-weight-bold" for="ins">Customer Address :</label></td>
-                                        <td style="width:3%">:</td>
-                                        <td><span id="view_customer_address"></span></td>
-                                        <td>&nbsp;&nbsp;&nbsp;</td>
-                                        <td><label class="font-weight-bold" for="view_expired_date">Expired Date :</label></td>
-                                        <td style="width:3%">:</td>
-                                        <td><span id="view_expired_date"></span></td>
+                                        <td style="width:10%; padding:5px"><label class="font-weight-bold" for="ins">Customer Address </label></td>
+                                        <td style="width:3%; padding:5px">:</td>
+                                        <td style="width:25%; padding:5px"><span id="view_customer_address"></span></td>
+                                        <td style="width:3%; padding:5px"> </td>
+                                        <td style="width:10%; padding:5px"><label class="font-weight-bold" for="view_expired_date">Expired Date </label></td>
+                                        <td style="width:3%; padding:5px">:</td>
+                                        <td style="width:25%; padding:5px"><span id="view_expired_date"></span></td>
                                     </tr>
                                     <tr>
-                                        <td><label class="font-weight-bold" for="view_customer_phone">Customer Phone :</label></td>
-                                        <td style="width:3%">:</td>
-                                        <td><span id="view_customer_phone"></span></td>
-                                        <td>&nbsp;&nbsp;&nbsp;</td>
-                                        <td><label class="font-weight-bold" for="view_customer_identity">Customer Identity :</label></td>
-                                        <td style="width:3%">:</td>
-                                        <td><span id="view_customer_identity"></span></td>
+                                        <td style="width:10%; padding:5px"><label class="font-weight-bold" for="view_customer_phone">Customer Phone </label></td>
+                                        <td style="width:3%; padding:5px">:</td>
+                                        <td style="width:25%; padding:5px"><span id="view_customer_phone"></span></td>
+                                        <td style="width:3%; padding:5px"> </td>
+                                        <td style="width:10%; padding:5px"><label class="font-weight-bold" for="view_customer_identity">Customer Identity </label></td>
+                                        <td style="width:3%; padding:5px">:</td>
+                                        <td style="width:25%; padding:5px"><span id="view_customer_identity"></span></td>
                                     </tr>
                                     <tr>
-                                        <td><label class="font-weight-bold" for="view_no_transaksi">No Transaksi :</label></td>
-                                        <td style="width:3%">:</td>
-                                        <td><span id="view_no_transaksi"></span></td>
-                                        <td>&nbsp;&nbsp;&nbsp;</td>
-                                        <td><label class="font-weight-bold" for="view_identity_type">Identity Type :</label></td>
-                                        <td style="width:3%">:</td>
-                                        <td><span id="view_identity_type"></span></td>
+                                        <td style="width:10%; padding:5px"><label class="font-weight-bold" for="view_no_transaksi">No Transaksi </label></td>
+                                        <td style="width:3%; padding:5px">:</td>
+                                        <td style="width:25%; padding:5px"><span id="view_no_transaksi"></span></td>
+                                        <td style="width:3%; padding:5px"> </td>
+                                        <td style="width:10%; padding:5px"><label class="font-weight-bold" for="view_identity_type">Identity Type </label></td>
+                                        <td style="width:3%; padding:5px">:</td>
+                                        <td style="width:25%; padding:5px"><span id="view_identity_type"></span></td>
                                     </tr>
                                     <tr>
-                                        <td><label class="font-weight-bold" for="view_service_status">Status :</label></td>
-                                        <td style="width:3%">:</td>
-                                        <td><span class="badge badge-success" id="view_service_status"></span></td>
-                                        <td>&nbsp;&nbsp;&nbsp;</td>
-                                        <td></td>
-                                        <td style="width:3%"></td>
-                                        <td></td>
+                                        <td style="width:10%; padding:5px"><label class="font-weight-bold" for="view_jasa">Jasa </label></td>
+                                        <td style="width:3%; padding:5px">:</td>
+                                        <td style="width:25%; padding:5px"><span id="view_jasa"></span>&nbsp;&nbsp;-&nbsp;
+                                        
+                                        <label for="view_biaya">Rp. </label>
+                                        <span id="view_biaya"></span></td>
+                                        <td style="width:3%; padding:5px"> </td>
+                                        <td style="width:10%; padding:5px"><label class="font-weight-bold" for="view_service_status">Status </label></td>
+                                        <td style="width:3%; padding:5px">:</td>
+                                        <td style="width:25%; padding:5px"><span class="badge badge-success" id="view_service_status"></span></td>
                                     </tr>
+                                </table>
+                                <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th width="1%">NO</th>
+                                            <th width="40%">Asset Name</th>
+                                            <th width="1%"><center>&nbsp;&nbsp;&nbsp;&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;</center></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                        $n=1;
+                                        $query = mysqli_query($con,"SELECT * FROM asset WHERE data_status='Enable' ORDER BY id_asset DESC")or die(mysqli_error($con));
+                                        while($row = mysqli_fetch_array($query)):
+                                        ?>
+                                        <tr>
+                                        <td><center><?= $n++; ?></center></td>
+                                            <td><?= $row['nama_asset']; ?></td>
+                                            <td><center><?= $row['status']; ?></center></td>
+                                            </tr>
+                                        <?php endwhile; ?>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

@@ -2,15 +2,16 @@
 <script>
 function submit(x) {
     if (x == 'add') {
-        $('[name="aloc_no"]').val("<?=noAloc();?>");
-        $('[name="aloc_name"]').val("");
-        $('#transaksiModal .modal-title').html('Add Location');
-        $('[name="aloc_no"]').prop('readonly', false);
+        $('[name="brand_no"]').val("<?=noBrand();?>");
+        $('[name="idcat"]').val("").trigger('change');
+        $('[name="namabrand"]').val("");
+        $('#transaksiModal .modal-title').html('Add Brand');
+        $('[name="brand_no"]').prop('readonly', false);
         $('[name="ubah"]').hide();
         $('[name="tambah"]').show();
     } else {
-        $('#transaksiModal .modal-title').html('Edit Location');
-        $('[name="aloc_no"]').prop('readonly', false);
+        $('#transaksiModal .modal-title').html('Edit Brand');
+        $('[name="brand_no"]').prop('readonly', false);
         $('[name="tambah"]').hide();
         $('[name="ubah"]').show();
 
@@ -19,12 +20,13 @@ function submit(x) {
             data: {
                 id: x
             },
-            url: '<?=base_url();?>process/view_aloc.php',
+            url: '<?=base_url();?>process/view_brand.php',
             dataType: 'json',
             success: function(data) {
-                $('[name="id_aloc"]').val(data.id_aloc);
-                $('[name="aloc_no"]').val(data.aloc_no);
-                $('[name="aloc_name"]').val(data.aloc_name);
+                $('[name="idbrand"]').val(data.idbrand);
+                $('[name="brand_no"]').val(data.brand_no);
+                $('[name="namabrand"]').val(data.namabrand);
+                $('[name="idcat"]').val(data.idcat).trigger('change');
             }
         });
     }
@@ -35,17 +37,17 @@ function submit(x) {
 
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Asset Location</h1>
+        <h1 class="h3 mb-0 text-gray-800">Brand</h1>
     </div>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <a href="#" class="btn btn-primary btn-icon-split btn-sm" data-toggle="modal" data-target="#transaksiModal"
-                onclick="submit('add')">
+                onclick="<?=base_url();?>viewws/produk/brand.php'">
                 <span class="icon text-white-50">
                     <i class="fas fa-plus"></i>
                 </span>
-                <span class="text">Add Asset Location</span>
+                <span class="text">Tambah</span>
             </a>
         </div>
         <div class="card-body">
@@ -54,28 +56,30 @@ function submit(x) {
                     <thead>
                         <tr>
                             <th width="20">NO</th>
-                            <th>Location Name</th>
-                            <th width="1%"><center>&nbsp;&nbsp;&nbsp;&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;</center></th>
+                            <th>Category Name</th>
+                            <th>Brand Name</th>
+                            <th width="50">AKSI</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
                         $n=1;
-                        $query = mysqli_query($con,"SELECT * FROM asset_loc WHERE data_status='Enable' ORDER BY aloc_no DESC")or die(mysqli_error($con));
+                        $query = mysqli_query($con,"SELECT * FROM brand x JOIN category x1 ON x.idcat=x1.idcat GROUP BY x1.idcat ORDER BY x1.cat_no DESC") or die(mysqli_error($con));
                         while($row = mysqli_fetch_array($query)):
                         ?>
                         <tr>
-                        <td><center><?= $n++; ?></center></td>
-                            <td><?= $row['aloc_name']; ?></td>
-                            <td><center>
+                            <td><?= $n++; ?></td>
+                            <td><?= $row['namacat']; ?></td>
+                            <!--<td><?= $row['namacat']; ?></td>-->
+                            <td><?= $row[mysqli_query($con,"SELECT COUNT(brandname) FROM table brand WHERE idcat=idcat")]; ?></td>
+                            <td>
                                 <a href="#transaksiModal" data-toggle="modal"
-                                    onclick="submit(<?=$row['id_aloc'];?>)" class="btn btn-sm btn-circle btn-info"
+                                    onclick="submit(<?=$row['idbrand'];?>)" class="btn btn-sm btn-circle btn-info"
                                     data-toggle="tooltip" data-placement="top" title="Ubah Data"><i
                                         class="fas fa-edit"></i></a>
-                                <a href="<?=base_url();?>process/loc.php?act=<?=encrypt('delete');?>&id_aloc=<?=encrypt($row['id_aloc']);?>"
+                                <a href="<?=base_url();?>process/brand.php?act=<?=encrypt('delete');?>&id=<?=encrypt($row['idbrand']);?>"
                                     class="btn btn-sm btn-circle btn-danger btn-hapus" data-toggle="tooltip"
                                     data-placement="top" title="Hapus Data"><i class="fas fa-trash"></i></a>
-                                </center>
                             </td>
                         </tr>
                         <?php endwhile; ?>
@@ -93,7 +97,7 @@ function submit(x) {
     aria-hidden="true" data-backdrop="static">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
-            <form action="<?=base_url();?>process/loc.php" method="post">
+            <form action="<?=base_url();?>process/brand.php" method="post">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel"></h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
@@ -104,21 +108,29 @@ function submit(x) {
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="aloc_no">Asset Location Number <span class="text-danger">*</span></label>
-                                <input type="hidden" name="aloc_no">
-                                <input type="text" class="form-control" id="aloc_no" name="aloc_no"
-                                    value="<?= noAloc(); ?>" required>
+                                <label for="brand_no">No. Brand <span class="text-danger">*</span></label>
+                                <input type="hidden" name="brand_no">
+                                <input type="text" class="form-control" id="brand_no" name="brand_no"
+                                    value="<?= noBrand(); ?>" required>
                             </div>
                         </div>
                         <div class="col-md-8">
                             <div class="form-group">
-                                <label for="aloc_name">Location Name <span class="text-danger">*</span></label>
-                                <input name="aloc_name" id="aloc_name" type="text" class="form-control" required>
+                                <label for="namabrand">Brand Name <span class="text-danger">*</span></label>
+                                <input name="namabrand" id="namabrand" class="form-control" required>
                             </div>
                         </div>
-                        
+                        <div class="col-md-10">
+                            <div class="form-group">
+                                <label for="idcat">Input Category <span class="text-danger">*</span></label>
+                                <select name="idcat" id="idcat" class="form-control select2"
+                                    style="width:100%;" required>
+                                    <option value="">-- Choose Category --</option>
+                                    <?= list_cat(); ?>
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    
                     <hr class="sidebar-divider">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal"><i class="fas fa-times"></i>
                         Batal</button>

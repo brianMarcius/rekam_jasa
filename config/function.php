@@ -8,11 +8,14 @@ if (!empty($_POST['func'])) {
             list_brand2($data);
             break;
         case 'list_tipe':
-                list_tipe($data);
-                break;
+            list_tipe($data);
+            break;
+        case 'list_cust1':
+            list_cust1($data);
+            break;
         case 'getInstallation':
             getInstallation();
-                break;
+            break;
         default:
             //function not found, error or something
             break;
@@ -39,7 +42,7 @@ function getInstallation(){
 
 function session_timeout(){
     //lama waktu 30 menit = 1800
-    if(isset($_SESSION['LAST_ACTIVITY'])&&(time()-$_SESSION['LAST_ACTIVITY']>1800)){
+    if(isset($_SESSION['LAST_ACTIVITY'])&&(time()-$_SESSION['LAST_ACTIVITY']>3600)){
         session_unset();
         session_destroy();
         header("Location:".$base_url."login.php");
@@ -77,6 +80,32 @@ function noCustomer(){
     // misal sprintf("%03s", 12); maka akan dihasilkan '012'
     // atau misal sprintf("%03s", 1); maka akan dihasilkan string '001'
     $char = "CUST";
+    $kodeBarang = $char . sprintf("%05s", $noUrut);
+    return $kodeBarang;
+}
+
+function noJJ(){
+    include ('conn.php');
+    // mencari kode barang dengan nilai paling besar
+    $query = "SELECT MAX(jasa_no) as maxKode FROM jenis_jasa";
+    $hasil = mysqli_query($con,$query);
+    $data = mysqli_fetch_array($hasil);
+    $kodeBarang = $data['maxKode'];
+
+    // mengambil angka atau bilangan dalam kode anggota terbesar,
+    // dengan cara mengambil substring mulai dari karakter ke-1 diambil 6 karakter
+    // misal 'TRX00001', akan diambil '001'
+    // setelah substring bilangan diambil lantas dicasting menjadi integer
+    $noUrut = (int) substr($kodeBarang, 4, 5);
+
+    // bilangan yang diambil ini ditambah 1 untuk menentukan nomor urut berikutnya
+    $noUrut++;
+
+    // membentuk kode anggota baru
+    // perintah sprintf("%03s", $noUrut); digunakan untuk memformat string sebanyak 3 karakter
+    // misal sprintf("%03s", 12); maka akan dihasilkan '012'
+    // atau misal sprintf("%03s", 1); maka akan dihasilkan string '001'
+    $char = "JASA";
     $kodeBarang = $char . sprintf("%05s", $noUrut);
     return $kodeBarang;
 }
@@ -237,6 +266,32 @@ function noAsset(){
     return $kodeBarang;
 }
 
+function noTrade(){
+    include ('conn.php');
+    // mencari kode barang dengan nilai paling besar
+    $query = "SELECT MAX(tradeno) as maxKode FROM trade";
+    $hasil = mysqli_query($con,$query);
+    $data = mysqli_fetch_array($hasil);
+    $kodeBarang = $data['maxKode'];
+
+    // mengambil angka atau bilangan dalam kode anggota terbesar,
+    // dengan cara mengambil substring mulai dari karakter ke-1 diambil 6 karakter
+    // misal 'TRX00001', akan diambil '001'
+    // setelah substring bilangan diambil lantas dicasting menjadi integer
+    $noUrut = (int) substr($kodeBarang, 3, 5);
+
+    // bilangan yang diambil ini ditambah 1 untuk menentukan nomor urut berikutnya
+    $noUrut++;
+
+    // membentuk kode anggota baru
+    // perintah sprintf("%03s", $noUrut); digunakan untuk memformat string sebanyak 3 karakter
+    // misal sprintf("%03s", 12); maka akan dihasilkan '012'
+    // atau misal sprintf("%03s", 1); maka akan dihasilkan string '001'
+    $char = "TRX";
+    $kodeBarang = $char . sprintf("%05s", $noUrut);
+    return $kodeBarang;
+}
+
 
 function list_jasa(){
     include ('conn.php');
@@ -247,6 +302,18 @@ function list_jasa(){
     }  
     return $opt; 
 }
+
+function list_cust(){
+    include ('conn.php');
+    $query = mysqli_query($con,"SELECT * FROM customer ORDER BY nama ASC");
+    $opt = "";
+    while($row = mysqli_fetch_array($query)){
+        $opt .= "<option value=\"".$row['idcust']."\">".$row['nama']."</option>";
+    }  
+    echo $opt; 
+}
+
+
 
 function list_cat(){
     include ('conn.php');
@@ -269,6 +336,16 @@ function list_sup(){
 }
 
 function list_aloc(){
+    include ('conn.php');
+    $query = mysqli_query($con,"SELECT id_aloc, aloc_name FROM asset_loc UNION SELECT idcust as id_aloc, nama as aloc_name from customer order by 2");
+    $opt = "";
+    while($row = mysqli_fetch_array($query)){
+        $opt .= "<option value=\"".$row['id_aloc']."\">".$row['aloc_name']."</option>";
+    }  
+    echo $opt; 
+}
+
+function list_asloc(){
     include ('conn.php');
     $query = mysqli_query($con,"SELECT * FROM asset_loc ORDER BY aloc_name ASC");
     $opt = "";
@@ -296,6 +373,26 @@ function list_brand2($idcat){
         $opt1 .= "<option value=\"".$row['idbrand']."\">".$row['namabrand']."</option>";
     }  
     echo $opt1; 
+}
+
+function list_cust1($idjasa){
+    include ('conn.php');
+    $query = mysqli_query($con,"SELECT * FROM customer WHERE id_jasa='$idjasa' ORDER BY nama ASC");
+    $opt1 = '<option value="">-- Pilih Customer --</option>';
+    while($row = mysqli_fetch_array($query)){
+        $opt1 .= "<option value=\"".$row['idcust']."\">".$row['nama']."</option>";
+    }  
+    echo $opt1; 
+}
+
+function list_jj(){
+    include ('conn.php');
+    $query = mysqli_query($con,"SELECT * FROM jenis_jasa ORDER BY nama_jasa ASC");
+    $opt = "";
+    while($row = mysqli_fetch_array($query)){
+        $opt .= "<option value=\"".$row['id_jasa']."\">".$row['nama_jasa']." - Rp.".$row['biaya']."</option>";
+    }  
+    echo $opt; 
 }
 
 function list_tipe($idbrand){

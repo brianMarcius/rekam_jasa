@@ -15,7 +15,7 @@ function submit(x) {
         $('[name="ubahsoon"]').hide();
         $('[name="tambah"]').show();
     } else {
-        $('#transaksiModal .modal-title').html('Edit Customer');
+        $('#transaksiModal .modal-title').html('Renew');
         $('[name="cust_no"]').prop('readonly', true);
         $('[name="exp"]').prop('readonly', true);
         $('[name="tambah"]').hide();
@@ -55,17 +55,17 @@ function submit(x) {
                             <th width="50%">Customer Name</th>
                             <th width="18%">Installation Date</th>
                             <th bgcolor="#ffff94" width="15%">Expired Date</th>
-                            <th width="10$">Action</th>
+                            <th width="1%"><center>&nbsp;&nbsp;&nbsp;&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;</center></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
                         $n=1;
-                        $query = mysqli_query($con,"SELECT * FROM customer WHERE exp BETWEEN DATE(NOW() + INTERVAL 0 DAY) AND DATE(NOW() + INTERVAL 7 DAY) ORDER BY exp ASC")or die(mysqli_error($con));
+                        $query = mysqli_query($con,"SELECT * FROM customer WHERE exp BETWEEN DATE(NOW() + INTERVAL 0 DAY) AND DATE(NOW() + INTERVAL 7 DAY) and data_status='Enable' ORDER BY exp ASC")or die(mysqli_error($con));
                         while($row = mysqli_fetch_array($query)):
                         ?>
                         <tr>
-                            <td><?= $n++; ?></td>
+                        <td><center><?= $n++; ?></center></td>
                             <td><?= $row['nama']; ?></td>
                             <td><?= $row['ins']; ?></td>
                             <td bgcolor="#ffff94"><?= $row['exp']; ?></td>
@@ -109,13 +109,13 @@ function submit(x) {
                                     value="<?= noCustomer(); ?>" required>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="exp">Expired Date <span class="text-danger">*</span></label>
                                 <input name="exp" id="exp" type="date" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label>Select Renewal</label>
                                 <select name="renew" class="form-control" required>

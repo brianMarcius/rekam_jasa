@@ -46,7 +46,20 @@
                 <a class="collapse-item <?=isset($sup)?'active':'';?>" href="?sup">Supplier</a>
             </div>
         </div>
-    </li> 
+    </li>
+    
+    <li class="nav-item <?=isset($jj)?'active':'';?>">
+        <a class="nav-link" href="?jj">
+            <i class="fas fa-fw fa-tags"></i>
+            <span>Jenis Jasa</span>
+        </a>
+    </li>
+    <li class="nav-item <?=isset($trade)?'active':'';?>">
+        <a class="nav-link" href="?trade">
+            <i class="fas fa-fw fa-tags"></i>
+            <span>Trade</span>
+        </a>
+    </li>
 
     <li class="nav-item <?=isset($cust)?'active':'';?>">
         <a class="nav-link collapsed" href="?#" data-toggle="collapse" data-target="#cust" aria-expanded="true"

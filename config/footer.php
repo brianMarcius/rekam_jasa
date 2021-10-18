@@ -121,6 +121,23 @@ $(document).ready(function() {
 })
 
 </script>
+<script>
+    $('#ididjasacat').on('change', function (e) {
+    var idjasa = $(this).val();
+    $.ajax({
+        type: "POST",
+        url: '<?=base_url();?>config/function.php',
+        data:{
+            func : "list_cust1",
+            data : idjasa 
+        },
+        success: function(data){
+            $("#idcust").html(data);
+        }
+    })
+})
+
+</script>
 </body>
 
 </html>

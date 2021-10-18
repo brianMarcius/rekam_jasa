@@ -45,6 +45,14 @@
         $prod = $sup = true;
         $views = 'views/produk/sup.php';
     }
+    else if(isset($_GET['jj'])){
+        $jj = true;
+        $views = 'views/produk/jj.php';
+    }
+    else if(isset($_GET['trade'])){
+        $trade = true;
+        $views = 'views/trade/trade.php';
+    }
     else if(isset($_GET['pengguna'])){
         $master = $pengguna = true;
         $views = 'views/master/pengguna.php';

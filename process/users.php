@@ -9,9 +9,9 @@ if(isset($_POST['tambah'])){
     $level = $_POST['level'];
     $password = password_hash($_POST['password'],PASSWORD_DEFAULT);
 
-    $cek = mysqli_query($con,"SELECT * FROM user WHERE un='$username'") or die(mysqli_error($con));
+    $cek = mysqli_query($con,"SELECT * FROM pengguna WHERE pengguna_username='$username'") or die(mysqli_error($con));
     if(mysqli_num_rows($cek)==0){
-        $insert = mysqli_query($con,"INSERT INTO user (nama, un, pw, lv) VALUES ('$nama','$username','$password','$level')") or die (mysqli_error($con));
+        $insert = mysqli_query($con,"INSERT INTO pengguna (pengguna_nama, pengguna_username, pengguna_password, pengguna_level) VALUES ('$nama','$username','$password','$level')") or die (mysqli_error($con));
         if($insert){
             $success = 'Berhasil menambahkan data pengguna';
         }else{
@@ -31,9 +31,9 @@ if(isset($_POST['ubah'])){
     $level = $_POST['level'];
 
     if($password!=""){
-        $update = mysqli_query($con,"UPDATE user SET nama='$nama', lv='$level', pw='".password_hash($password,PASSWORD_DEFAULT)."' WHERE id='$id'") or die (mysqli_error($con));
+        $update = mysqli_query($con,"UPDATE pengguna SET pengguna_nama='$nama', pengguna_level='$level', pengguna_password='".password_hash($password,PASSWORD_DEFAULT)."' WHERE id='$id'") or die (mysqli_error($con));
     }else{
-        $update = mysqli_query($con,"UPDATE user SET nama='$nama', lv='$level' WHERE id='$id'") or die (mysqli_error($con));
+        $update = mysqli_query($con,"UPDATE pengguna SET pengguna_nama='$nama', pengguna_level='$level' WHERE idpengguna ='$id'") or die (mysqli_error($con));
     }
     if($update){
         $success = 'Berhasil mengubah data pengguna';
@@ -61,7 +61,7 @@ if(decrypt($_GET['act'])=='ganti_pass' && isset($_POST['ubah_pass'])){
     $id = $_POST['id'];
     $password =password_hash($_POST['password'],PASSWORD_DEFAULT);
 
-    $update = mysqli_query($con,"UPDATE user SET pw='$password' WHERE id='$id'") or die (mysqli_error($con));
+    $update = mysqli_query($con,"UPDATE pengguna SET pengguna_password='$password' WHERE idpengguna='$id'") or die (mysqli_error($con));
     $_SESSION['success'] = "Anda berhasil mengubah password";
     echo '<script>window.history.back();</script>';
 }

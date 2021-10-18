@@ -12,7 +12,7 @@ if(isset($_POST['tambah'])){
 
     $cekNomor = mysqli_query($con,"SELECT * FROM brand WHERE brand_no='$brand_no'") or die(mysqli_error($con));
     if(mysqli_num_rows($cekNomor)==0){
-        $insert = mysqli_query($con,"INSERT INTO brand (brand_no, namabrand, idcat) VALUES ('$brand_no','$namabrand','$idcat')") or die (mysqli_error($con));
+        $insert = mysqli_query($con,"INSERT INTO brand (data_status, brand_no, namabrand, idcat) VALUES ('Enable', '$brand_no','$namabrand','$idcat')") or die (mysqli_error($con));
         if($insert){
             $success = 'Berhasil menambahkan data transaksi';
         }else{
@@ -32,7 +32,7 @@ if(isset($_POST['ubah'])){
     $idcat = $_POST['idcat'];
 
 
-    $update = mysqli_query($con,"UPDATE brand SET brand_no='$brand_no', namabrand='$namabrand', idcat='$idcat' WHERE idbrand='$idbrand'") or die (mysqli_error($con));
+    $update = mysqli_query($con,"UPDATE brand SET namabrand='$namabrand', idcat='$idcat' WHERE brand_no='$brand_no'") or die (mysqli_error($con));
 
     // var_dump($update);die;
     if($update){
@@ -49,7 +49,7 @@ if(isset($_POST['ubah'])){
 if(decrypt($_GET['act'])=='delete' && isset($_GET['idbrand'])!=""){
     // echo $_GET['act'];die;
     $idbrand = decrypt($_GET['idbrand']);
-    $delete = mysqli_query($con, "DELETE FROM brand WHERE idbrand='$idbrand'")or die(mysqli_error($con));
+    $delete = mysqli_query($con, "UPDATE brand SET data_status='Disable' WHERE idbrand='$idbrand'")or die(mysqli_error($con));
     if ($delete) {
         $success = "Data transaksi berhasil dihapus";
     }else{

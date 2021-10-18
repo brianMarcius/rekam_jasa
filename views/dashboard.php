@@ -33,7 +33,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <canvas id="myChart" width="400" height="150"></canvas>
+            <center><h1 class="h3 mb-0 text-gray-800">Chart Customer</h1></center>
+            <canvas id="myChart" width="4" height="1"></canvas>
         </div>
         <div class="card-body">
             
@@ -88,10 +89,10 @@
                     ?>
                     ],
                     backgroundColor: [
-                        'rgba(54, 162, 235, 0.9)',
+                        'rgba(0, 214, 82, 1)',
                     ],
                     borderColor: [
-                        'rgba(54, 162, 235, 1)',
+                        'rgba(0, 214, 82, 0.5)',
                     ],
                     borderWidth: 1
                 },{
@@ -111,10 +112,10 @@
                     ?>
                     ],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.9)',
+                        'rgba(227, 54, 54, 1)',
                     ],
                     borderColor: [
-                        'rgba(255, 99, 132, 1)',
+                        'rgba(227, 54, 54, 0.5)',
                     ],
                     borderWidth: 1
                 }

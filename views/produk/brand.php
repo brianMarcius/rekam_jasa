@@ -58,27 +58,27 @@ function submit(x) {
                             <th width="20">NO</th>
                             <th>Category Name</th>
                             <th>Brand Name</th>
-                            <th width="50">AKSI</th>
+                            <<th width="1%"><center>&nbsp;&nbsp;&nbsp;&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;</center></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
                         $n=1;
-                        $query = mysqli_query($con,"SELECT * FROM brand x JOIN category x1 ON x.idcat=x1.idcat ORDER BY x1.cat_no DESC") or die(mysqli_error($con));
+                        $query = mysqli_query($con,"SELECT * FROM brand x, category x1 WHERE x.idcat=x1.idcat and x.data_status='Enable' ORDER BY x1.cat_no DESC") or die(mysqli_error($con));
                         while($row = mysqli_fetch_array($query)):
                         ?>
                         <tr>
-                            <td><?= $n++; ?></td>
+                        <td><center><?= $n++; ?></center></td>
                             <td><?= $row['namacat']; ?></td>
                             <td><?= $row['namabrand']; ?></td>
-                            <td>
+                            <td><center>
                                 <a href="#transaksiModal" data-toggle="modal"
                                     onclick="submit(<?=$row['idbrand'];?>)" class="btn btn-sm btn-circle btn-info"
                                     data-toggle="tooltip" data-placement="top" title="Ubah Data"><i
                                         class="fas fa-edit"></i></a>
-                                <a href="<?=base_url();?>process/brand.php?act=<?=encrypt('delete');?>&id=<?=encrypt($row['idbrand']);?>"
+                                <a href="<?=base_url();?>process/brand.php?act=<?=encrypt('delete');?>&idbrand=<?=encrypt($row['idbrand']);?>"
                                     class="btn btn-sm btn-circle btn-danger btn-hapus" data-toggle="tooltip"
-                                    data-placement="top" title="Hapus Data"><i class="fas fa-trash"></i></a>
+                                    data-placement="top" title="Hapus Data"><i class="fas fa-trash"></i></a></center>
                             </td>
                         </tr>
                         <?php endwhile; ?>

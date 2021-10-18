@@ -21,8 +21,8 @@ if(isset($_POST['tambah'])){
 
     $cekNomor = mysqli_query($con,"SELECT * FROM asset WHERE id_asset='$id_asset'") or die(mysqli_error($con));
     if(mysqli_num_rows($cekNomor)==0){
-        $insert = mysqli_query($con,"INSERT INTO asset (id_asset, idcat, idbrand, id_aloc, id_sup, idtipe, asset_no, nama_asset, sn, pd, harga, status, descr) 
-        VALUES ('$id_asset','$idcat','$idbrand','$id_aloc','$id_sup','$idtipe','$asset_no','$nama_asset','$sn','$pd','$harga','$status','$descr')") or die (mysqli_error($con));
+        $insert = mysqli_query($con,"INSERT INTO asset (data_status, id_asset, idcat, idbrand, id_aloc, id_sup, idtipe, asset_no, nama_asset, sn, pd, harga, status, descr) 
+        VALUES ('Enable','$id_asset','$idcat','$idbrand','$id_aloc','$id_sup','$idtipe','$asset_no','$nama_asset','$sn','$pd','$harga','$status','$descr')") or die (mysqli_error($con));
         if($insert){
             $success = 'Berhasil menambahkan data transaksi';
         }else{
@@ -50,7 +50,7 @@ if(isset($_POST['ubah'])){
     $status = $_POST['status'];
     $descr = $_POST['descr'];
 
-    $update = mysqli_query($con,"UPDATE customer SET idbrand='$idbrand', id_aloc='$id_aloc', id_sup='$id_sup', idtipe='$idtipe', 
+    $update = mysqli_query($con,"UPDATE asset SET idbrand='$idbrand', id_aloc='$id_aloc', id_sup='$id_sup', idtipe='$idtipe', 
     asset_no='$asset_no', nama_asset='$nama_asset', sn='$sn', pd='$pd', harga='$harga', status='$status', descr='$descr' WHERE idcat='$idcat'")
      or die (mysqli_error($con));
     
@@ -70,7 +70,7 @@ if(isset($_POST['ubah'])){
 if(decrypt($_GET['act'])=='delete' && isset($_GET['id_asset'])!=""){
     // echo $_GET['act'];die;
     $id_asset = decrypt($_GET['id_asset']);
-    $delete = mysqli_query($con, "DELETE FROM category WHERE id_asset='$id_asset'")or die(mysqli_error($con));
+    $delete = mysqli_query($con, "UPDATE asset SET data_status='Disable' WHERE id_asset='$id_asset'")or die(mysqli_error($con));
     if ($delete) {
         $success = "Data transaksi berhasil dihapus";
     }else{

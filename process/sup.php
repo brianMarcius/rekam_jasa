@@ -52,7 +52,7 @@ if(isset($_POST['ubah'])){
 if(decrypt($_GET['act'])=='delete' && isset($_GET['id_sup'])!=""){
     // echo $_GET['act'];die;
     $id_sup = decrypt($_GET['id_sup']);
-    $delete = mysqli_query($con, "DELETE FROM sup WHERE id_sup='$id_sup'")or die(mysqli_error($con));
+    $delete = mysqli_query($con, "UPDATE sup SET data_status='Disable' WHERE id_sup='$id_sup'")or die(mysqli_error($con));
     if ($delete) {
         $success = "Data transaksi berhasil dihapus";
     }else{

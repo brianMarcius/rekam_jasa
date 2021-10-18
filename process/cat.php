@@ -12,7 +12,7 @@ if(isset($_POST['tambah'])){
 
     $cekNomor = mysqli_query($con,"SELECT * FROM category WHERE idcat='$idcat'") or die(mysqli_error($con));
     if(mysqli_num_rows($cekNomor)==0){
-        $insert = mysqli_query($con,"INSERT INTO category (idcat, namacat, cat_no) VALUES ('$idcat','$namacat','$cat_no')") or die (mysqli_error($con));
+        $insert = mysqli_query($con,"INSERT INTO category (idcat, namacat, cat_no, data_status) VALUES ('$idcat','$namacat','$cat_no','Active')") or die (mysqli_error($con));
         if($insert){
             $success = 'Berhasil menambahkan data transaksi';
         }else{
@@ -48,7 +48,8 @@ if(isset($_POST['ubah'])){
 if(decrypt($_GET['act'])=='delete' && isset($_GET['idcat'])!=""){
     // echo $_GET['act'];die;
     $idcat = decrypt($_GET['idcat']);
-    $delete = mysqli_query($con, "DELETE FROM category WHERE idcat='$idcat'")or die(mysqli_error($con));
+
+    $delete = mysqli_query($con, "UPDATE category SET data_status='Disable' WHERE idcat='$idcat'")or die(mysqli_error($con));
     if ($delete) {
         $success = "Data transaksi berhasil dihapus";
     }else{

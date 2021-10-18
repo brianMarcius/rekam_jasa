@@ -48,7 +48,7 @@ if(isset($_POST['ubah'])){
 if(decrypt($_GET['act'])=='delete' && isset($_GET['id_aloc'])!=""){
     // echo $_GET['act'];die;
     $id_aloc = decrypt($_GET['id_aloc']);
-    $delete = mysqli_query($con, "DELETE FROM asset_loc WHERE id_aloc='$id_aloc'")or die(mysqli_error($con));
+    $delete = mysqli_query($con, "UPDATE asset_loc SET data_status='Disable' WHERE id_aloc='$id_aloc'")or die(mysqli_error($con));
     if ($delete) {
         $success = "Data transaksi berhasil dihapus";
     }else{

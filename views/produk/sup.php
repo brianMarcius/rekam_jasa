@@ -60,17 +60,17 @@ function submit(x) {
                         <tr>
                             <th width="20">NO</th>
                             <th>Supplier Name</th>
-                            <th width="50">Action</th>
+                            <th width="1%"><center>&nbsp;&nbsp;&nbsp;&nbsp;Action&nbsp;&nbsp;&nbsp;&nbsp;</center></th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
                         $n=1;
-                        $query = mysqli_query($con,"SELECT * FROM sup ORDER BY sup_no DESC")or die(mysqli_error($con));
+                        $query = mysqli_query($con,"SELECT * FROM sup WHERE data_status='Enable' ORDER BY sup_no DESC")or die(mysqli_error($con));
                         while($row = mysqli_fetch_array($query)):
                         ?>
                         <tr>
-                            <td><?= $n++; ?></td>
+                        <td><center><?= $n++; ?></center></td>
                             <td><?= $row['sup_name']; ?></td>
                             <td><center>
                                 <a href="#transaksiModal" data-toggle="modal"
@@ -127,7 +127,7 @@ function submit(x) {
                                 <input name="sup_addr" id="sup_addr" type="text" class="form-control" required>
                             </div>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="sup_phn">Supplier Phone <span class="text-danger">*</span></label>
                                 <input name="sup_phn" id="sup_phn" type="text" class="form-control" required>
